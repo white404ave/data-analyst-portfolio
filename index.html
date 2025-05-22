@@ -12,7 +12,7 @@
       font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 2rem;
-      background-color: #f8fafc;
+      background: linear-gradient(to right, #f8fafc, #e0f2fe);
       color: #1f2937;
     }
     header {
@@ -20,21 +20,32 @@
       margin-bottom: 2rem;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+      margin-bottom: 0.25rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+      color: #1d4ed8;
+      border-bottom: 2px solid #dbeafe;
+      padding-bottom: 0.5rem;
     }
     .section {
       margin-bottom: 2rem;
     }
     .project {
       background-color: #ffffff;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      margin-bottom: 1rem;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+      transition: transform 0.3s ease;
+    }
+    .project:hover {
+      transform: scale(1.02);
     }
     .project h3 {
-      margin: 0 0 0.25rem 0;
+      margin: 0 0 0.5rem 0;
+      font-size: 1.25rem;
     }
     a {
       color: #2563eb;
@@ -66,13 +77,13 @@
     </div>
 
     <div class="project">
-      <h3>📊 Sleep vs Bugs Reported</h3>
+      <h3>😴 Sleep vs Bugs Reported</h3>
       <p>Analyzing how rest impacts performance metrics.</p>
       <canvas id="sleepBugsChart"></canvas>
     </div>
 
     <div class="project">
-      <h3>📊 Cognitive Load vs Task Success</h3>
+      <h3>🧠 Cognitive Load vs Task Success</h3>
       <p>Exploring how mental strain correlates with success rate.</p>
       <canvas id="cognitiveSuccessChart"></canvas>
     </div>
@@ -80,7 +91,6 @@
 
   <section class="section">
     <h2>🔗 Links</h2>
-    <p><a href="#">Resume (PDF)</a></p>
     <p><a href="https://github.com/white404ave">GitHub</a></p>
     <p><a href="https://linkedin.com/in/jwhite404">LinkedIn</a></p>
   </section>
@@ -92,7 +102,7 @@
       download: true,
       header: true,
       complete: function(results) {
-        const data = results.data.filter(row => row.ai_usage_hours && row.commits); // ensure values exist
+        const data = results.data.filter(row => row.ai_usage_hours && row.commits);
 
         const labels = data.map((_, i) => `Entry ${i + 1}`);
         const aiUsage = data.map(row => parseFloat(row.ai_usage_hours));
