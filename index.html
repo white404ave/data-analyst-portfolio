@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>John White | Data Analyst Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -41,6 +42,11 @@
     a:hover {
       text-decoration: underline;
     }
+    canvas {
+      max-width: 100%;
+      height: auto;
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -55,18 +61,21 @@
     <div class="project">
       <h3>📊 E-Commerce Sales Dashboard</h3>
       <p>Analyzed sales trends using Python and Tableau dashboards to uncover seasonal insights.</p>
+      <canvas id="salesChart"></canvas>
       <p><a href="#">GitHub Repo</a> | <a href="#">Live Dashboard</a></p>
     </div>
 
     <div class="project">
       <h3>🧠 Survey Data Insights</h3>
       <p>Performed EDA using pandas and seaborn to explore sentiment and demographics.</p>
+      <canvas id="surveyChart"></canvas>
       <p><a href="#">GitHub Repo</a></p>
     </div>
 
     <div class="project">
       <h3>✈️ Airline Market Fare Analysis</h3>
       <p>Used Python and pandas to analyze U.S. airline market data, exploring how factors like distance, market concentration, and competition affect average fares. Visualized fare trends and developed insights into market efficiency and airline strategy.</p>
+      <canvas id="airlineChart"></canvas>
       <p><a href="#">GitHub Repo</a></p>
     </div>
   </section>
@@ -77,5 +86,58 @@
     <p><a href="https://github.com/white404ave">GitHub</a></p>
     <p><a href="https://linkedin.com/in/jwhite404">LinkedIn</a></p>
   </section>
+
+  <script>
+    // Bar Chart – Monthly Sales
+    new Chart(document.getElementById('salesChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Monthly Sales ($)',
+          data: [12000, 15000, 18000, 17000, 20000, 24000],
+          backgroundColor: '#3b82f6'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // Pie Chart – Survey Demographics
+    new Chart(document.getElementById('surveyChart'), {
+      type: 'pie',
+      data: {
+        labels: ['18-25', '26-35', '36-45', '46+'],
+        datasets: [{
+          label: 'Age Group',
+          data: [25, 35, 20, 20],
+          backgroundColor: ['#60a5fa', '#34d399', '#fbbf24', '#f87171']
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    // Line Chart – Airline Fare Trends
+    new Chart(document.getElementById('airlineChart'), {
+      type: 'line',
+      data: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [{
+          label: 'Avg Fare ($)',
+          data: [250, 230, 240, 260],
+          fill: false,
+          borderColor: '#10b981',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+  </script>
 </body>
 </html>
