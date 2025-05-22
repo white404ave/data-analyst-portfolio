@@ -6,6 +6,7 @@
   <title>John White | Data Analyst Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -59,24 +60,21 @@
     <h2>🔹 Featured Projects</h2>
 
     <div class="project">
-      <h3>📊 E-Commerce Sales Dashboard</h3>
-      <p>Analyzed sales trends using Python and Tableau dashboards to uncover seasonal insights.</p>
-      <canvas id="salesChart"></canvas>
-      <p><a href="#">GitHub Repo</a> | <a href="#">Live Dashboard</a></p>
+      <h3>📊 AI Developer Productivity</h3>
+      <p>Visualizing productivity trends with AI tools using Google Sheets live data.</p>
+      <canvas id="aiCommitsChart"></canvas>
     </div>
 
     <div class="project">
-      <h3>🧠 Survey Data Insights</h3>
-      <p>Performed EDA using pandas and seaborn to explore sentiment and demographics.</p>
-      <canvas id="surveyChart"></canvas>
-      <p><a href="#">GitHub Repo</a></p>
+      <h3>📊 Sleep vs Bugs Reported</h3>
+      <p>Analyzing how rest impacts performance metrics.</p>
+      <canvas id="sleepBugsChart"></canvas>
     </div>
 
     <div class="project">
-      <h3>✈️ Airline Market Fare Analysis</h3>
-      <p>Used Python and pandas to analyze U.S. airline market data, exploring how factors like distance, market concentration, and competition affect average fares. Visualized fare trends and developed insights into market efficiency and airline strategy.</p>
-      <canvas id="airlineChart"></canvas>
-      <p><a href="#">GitHub Repo</a></p>
+      <h3>📊 Cognitive Load vs Task Success</h3>
+      <p>Exploring how mental strain correlates with success rate.</p>
+      <canvas id="cognitiveSuccessChart"></canvas>
     </div>
   </section>
 
@@ -88,54 +86,71 @@
   </section>
 
   <script>
-    // Bar Chart – Monthly Sales
-    new Chart(document.getElementById('salesChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        datasets: [{
-          label: 'Monthly Sales ($)',
-          data: [12000, 15000, 18000, 17000, 20000, 24000],
-          backgroundColor: '#3b82f6'
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } }
-      }
-    });
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSI-_i86dlC-GHxbKVErQBOUcOWL5ZAypBr9llXKlCx7W-z9T7mMqp5JrgsXhrhWvzQXXvc_8NNFIf1/pub?output=csv';
 
-    // Pie Chart – Survey Demographics
-    new Chart(document.getElementById('surveyChart'), {
-      type: 'pie',
-      data: {
-        labels: ['18-25', '26-35', '36-45', '46+'],
-        datasets: [{
-          label: 'Age Group',
-          data: [25, 35, 20, 20],
-          backgroundColor: ['#60a5fa', '#34d399', '#fbbf24', '#f87171']
-        }]
-      },
-      options: {
-        responsive: true
-      }
-    });
+    Papa.parse(csvUrl, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        const data = results.data.filter(row => row.ai_usage_hours && row.commits); // ensure values exist
 
-    // Line Chart – Airline Fare Trends
-    new Chart(document.getElementById('airlineChart'), {
-      type: 'line',
-      data: {
-        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-        datasets: [{
-          label: 'Avg Fare ($)',
-          data: [250, 230, 240, 260],
-          fill: false,
-          borderColor: '#10b981',
-          tension: 0.1
-        }]
-      },
-      options: {
-        responsive: true
+        const labels = data.map((_, i) => `Entry ${i + 1}`);
+        const aiUsage = data.map(row => parseFloat(row.ai_usage_hours));
+        const commits = data.map(row => parseInt(row.commits));
+        const sleep = data.map(row => parseFloat(row.sleep_hours));
+        const bugs = data.map(row => parseInt(row.bugs_reported));
+        const cogLoad = data.map(row => parseFloat(row.cognitive_load));
+        const success = data.map(row => parseInt(row.task_success));
+
+        new Chart(document.getElementById('aiCommitsChart'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              { label: 'AI Usage (hrs)', data: aiUsage, backgroundColor: '#3b82f6' },
+              { label: 'Commits', data: commits, backgroundColor: '#10b981' }
+            ]
+          },
+          options: { responsive: true, scales: { x: { stacked: true }, y: { beginAtZero: true } } }
+        });
+
+        new Chart(document.getElementById('sleepBugsChart'), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              { label: 'Sleep Hours', data: sleep, borderColor: '#6366f1', yAxisID: 'y1' },
+              { label: 'Bugs Reported', data: bugs, borderColor: '#f87171', yAxisID: 'y2' }
+            ]
+          },
+          options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            stacked: false,
+            scales: {
+              y1: { type: 'linear', position: 'left', beginAtZero: true },
+              y2: { type: 'linear', position: 'right', beginAtZero: true, grid: { drawOnChartArea: false } }
+            }
+          }
+        });
+
+        new Chart(document.getElementById('cognitiveSuccessChart'), {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Cognitive Load vs Task Success',
+              data: cogLoad.map((x, i) => ({ x, y: success[i] })),
+              backgroundColor: '#facc15'
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: { title: { display: true, text: 'Cognitive Load' }, min: 0, max: 10 },
+              y: { title: { display: true, text: 'Task Success' }, min: -0.1, max: 1.1, ticks: { stepSize: 1 } }
+            }
+          }
+        });
       }
     });
   </script>
