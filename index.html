@@ -78,13 +78,13 @@
 
     <div class="project">
       <h3>😴 Sleep vs Bugs Reported</h3>
-      <p>Analyzing how rest impacts performance metrics by comparing sleep duration with the number of bugs reported.</p>
+      <p>Analyzing how rest impacts performance metrics by comparing sleep duration with the number of bugs reported. </p>
       <canvas id="sleepBugsChart"></canvas>
     </div>
 
     <div class="project">
       <h3>🧠 Cognitive Load vs Task Success</h3>
-      <p>Exploring how mental strain correlates with success rate in tasks, using a scatterplot for visual correlation.</p>
+      <p>Exploring how mental strain correlates with success rate in tasks, visualized using a bubble chart for improved clarity and dimensional insight.</p>
       <canvas id="cognitiveSuccessChart"></canvas>
     </div>
   </section>
@@ -146,11 +146,11 @@
         });
 
         new Chart(document.getElementById('cognitiveSuccessChart'), {
-          type: 'scatter',
+          type: 'bubble',
           data: {
             datasets: [{
               label: 'Cognitive Load vs Task Success',
-              data: cogLoad.map((x, i) => ({ x, y: success[i] })),
+              data: cogLoad.map((x, i) => ({ x, y: success[i], r: 8 })),
               backgroundColor: '#facc15'
             }]
           },
