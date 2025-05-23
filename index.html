@@ -72,19 +72,19 @@
 
     <div class="project">
       <h3>📊 AI Developer Productivity</h3>
-      <p>Visualizing productivity trends with AI tools using Google Sheets live data.</p>
+      <p>Visualizing how time spent using AI tools correlates with code contributions. </p>
       <canvas id="aiCommitsChart"></canvas>
     </div>
 
     <div class="project">
       <h3>😴 Sleep vs Bugs Reported</h3>
-      <p>Analyzing how rest impacts performance metrics.</p>
+      <p>Analyzing how rest impacts performance metrics by comparing sleep duration with the number of bugs reported.</p>
       <canvas id="sleepBugsChart"></canvas>
     </div>
 
     <div class="project">
       <h3>🧠 Cognitive Load vs Task Success</h3>
-      <p>Exploring how mental strain correlates with success rate.</p>
+      <p>Exploring how mental strain correlates with success rate in tasks, using a scatterplot for visual correlation.</p>
       <canvas id="cognitiveSuccessChart"></canvas>
     </div>
   </section>
@@ -102,7 +102,8 @@
       download: true,
       header: true,
       complete: function(results) {
-        const data = results.data.filter(row => row.ai_usage_hours && row.commits);
+        const rawData = results.data.filter(row => row.ai_usage_hours && row.commits);
+        const data = rawData.slice(0, 8);
 
         const labels = data.map((_, i) => `Entry ${i + 1}`);
         const aiUsage = data.map(row => parseFloat(row.ai_usage_hours));
